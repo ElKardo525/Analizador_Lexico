@@ -44,7 +44,7 @@ public class Principal {
         }
         Files.move(
                 Paths.get("C:/Users/jaupa/Documents/NetBeansProjects/AnalizadorLexico/Sintax.java"), 
-                Paths.get("C:/Users/jaupa/Documents/NetBeansProjects/AnalizadorLexico/Sintax.java")
+                Paths.get("C:/Users/jaupa/Documents/NetBeansProjects/AnalizadorLexico/src/codigo/Sintax.java")
         );
     }
 }

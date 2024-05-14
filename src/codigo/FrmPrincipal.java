@@ -6,6 +6,7 @@
 package codigo;
 
 import static codigo.Tokens.Int;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 
 /**
@@ -32,20 +34,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
-    private void analizadorLexico() throws IOException{
+
+    private void analizadorLexico() throws IOException {
         int cont = 1;
-        
-        String expr = (String)txtResultado1.getText();
+
+        String expr = (String) txtResultado1.getText();
         Lexer lexer = new Lexer(new StringReader(expr));
-        String resultado = "LINEA " + cont + "\t\\tSIMBOLO\n";
-        while(true){
+        String resultado = "LINEA " + cont + "\t\\SIMBOLO\n";
+        while (true) {
             Tokens token = lexer.yylex();
-            if(token == null){
+            if (token == null) {
                 txtAnalizadorLex.setText(resultado);
                 return;
             }
-            switch (token){
+            switch (token) {
                 case Linea:
                     cont++;
                     resultado += "Linea" + cont + "\n";
@@ -58,53 +60,53 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     break;
                 case Else:
                     resultado += " <Reservada else>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case While:
                     resultado += " <Reservada while>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Suma:
                     resultado += " <simbolo suma>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Igual:
                     resultado += " <simbolo igual>\t" + lexer.lexeme + "\n";
-                    break; 
+                    break;
                 case Resta:
                     resultado += " <simbolo resta>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Multiplicacion:
                     resultado += " <simbolo multiplicacion>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Division:
                     resultado += " <simbolo division>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Parentesis_a:
                     resultado += " <abrir parentesis_a>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Parentesis_c:
                     resultado += " <cerrar parentesis_c>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Llave_a:
                     resultado += " <abrir llave_a>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Llave_c:
                     resultado += " <cerrar llave_c>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Main:
                     resultado += " <main>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case P_coma:
                     resultado += " <punto y coma>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Identificador:
                     resultado += " <identificador>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case Numero:
                     resultado += " <numero>\t" + lexer.lexeme + "\n";
-                    break;  
+                    break;
                 case ERROR:
-                    resultado += " <simbolo error>\t" + lexer.lexeme + "\n";
-                    break;  
-                    
+                    resultado += " <simbolo error>\n";
+                    break;
+
             }
         }
     }
@@ -128,7 +130,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnAnalizar2 = new javax.swing.JButton();
         btnLimpiar2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAnalizadorSin = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -166,12 +168,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         btnAnalizar2.setText("Analizar");
+        btnAnalizar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnalizar2ActionPerformed(evt);
+            }
+        });
 
         btnLimpiar2.setText("Limpiar");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        txtAnalizadorSin.setColumns(20);
+        txtAnalizadorSin.setRows(5);
+        jScrollPane3.setViewportView(txtAnalizadorSin);
 
         jLabel1.setText("ANALIZADOR SINTATICO");
 
@@ -182,12 +189,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(219, 219, 219))
@@ -195,13 +196,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnAnalizar1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(282, 282, 282)
                         .addComponent(btnAbrir)
-                        .addGap(84, 84, 84)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnLimpiar)
-                        .addContainerGap(97, Short.MAX_VALUE))
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -212,18 +211,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                 .addComponent(btnLimpiar2))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAnalizar1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(9, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAnalizar1)
-                        .addComponent(btnAbrir, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnAnalizar1)
+                    .addComponent(btnAbrir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,8 +254,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAnalizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizar1ActionPerformed
-        
-        JFileChooser chooser=new JFileChooser();
+
+        JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
         File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
         try {
@@ -272,6 +279,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnAnalizar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizar2ActionPerformed
+        // TODO add your handling code here:
+        String ST = txtResultado1.getText();
+        Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+
+        try {
+            s.parse();
+            txtAnalizadorSin.setText(("Analisis realizado satisfactoriamente"));
+            txtAnalizadorSin.setForeground(new Color(25,111,61));
+        } catch (Exception ex) {
+            Symbol sym = s.getS();
+            txtAnalizadorSin.setText("Error deanalisis. Linea: " +(sym.right + 1) + "Columna: " +(sym.left + 1) + ", Texto: \"" +sym.value + "\n");
+            txtAnalizadorSin.setForeground(Color.RED);
+        }
+    }//GEN-LAST:event_btnAnalizar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,8 +342,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea txtAnalizadorLex;
+    private javax.swing.JTextArea txtAnalizadorSin;
     private javax.swing.JTextArea txtResultado1;
     // End of variables declaration//GEN-END:variables
 }
